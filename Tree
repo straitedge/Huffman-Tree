@@ -1,3 +1,4 @@
+package huffman;
 // tree.java
 // demonstrates binary tree
 // to run this program: C>java TreeApp
@@ -6,8 +7,8 @@ import java.util.*; // for Stack class
 ////////////////////////////////////////////////////////////////
 class Node
 {
-	public int iData; // data item (key)
-	public double dData; // data item
+	public int iData; // frequency
+	public double dData; // char value
 	public Node leftChild; // this node's left child
 	public Node rightChild; // this node's right child
 	public void displayNode() // display ourself
