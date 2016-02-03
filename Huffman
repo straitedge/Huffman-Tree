@@ -1,44 +1,134 @@
+package huffman;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class Huffman 
 {
-	
-	private static String text = "";
-	public static ArrayList ftable = new ArrayList();
-	
-	public Huffman(String str) 
-	{
-		text = str;
+
+	int[] freqTable=new int[29];
+	PriorityQueue<String> queue;
+
+	public Huffman(String baseInput){
+		int m=0;String alphabet="A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ / ]";
+		String allCaps=baseInput.toUpperCase();
+		makeFreqTable(allCaps);
+		System.out.print(alphabet);
+		System.out.println();
+		while(m<29){System.out.print(freqTable[m]+" ");m++;}
+		System.out.println();
+		queueTree();
+
 	}
-
-
 	public static void encode()
 	{
 		//make freq table - 1st make lower case
-		text = text.toLowerCase();
-		for(int i =0;i<text.length();i++)
-		{
-			int temp = (int) text.charAt(i);
-			ftable[temp]++;
-			
-		}		
-		
+
 		//queue tree
 		//make Huffman tree
 		//make code table
 		//code
 	}
-	
-	
+
+
 	public static void decode()
 	{
-		
+
 	}
-	
-	
+
+
 	public static void displayTree()
 	{
-		System.out.println(text);
+		//System.out.println(text);
 	}
-	
+
+
+	public void makeFreqTable(String input){
+		int n=0; char charCheck='a';
+		while(n<input.length()){
+			charCheck=input.charAt(n);
+			switch(charCheck){
+			case 'A': freqTable[0]=freqTable[0]+1;String a="A"+freqTable[0];break;
+			case 'B': freqTable[1]=freqTable[1]+1;break;
+			case 'C': freqTable[2]=freqTable[2]+1;break;
+			case 'D': freqTable[3]=freqTable[3]+1;break;
+			case 'E': freqTable[4]=freqTable[4]+1;break;
+			case 'F': freqTable[5]=freqTable[5]+1;break;
+			case 'G': freqTable[6]=freqTable[6]+1;break;
+			case 'H': freqTable[7]=freqTable[7]+1;break;
+			case 'I': freqTable[8]=freqTable[8]+1;break;    
+			case 'J': freqTable[9]=freqTable[9]+1;break;
+			case 'K': freqTable[10]=freqTable[10]+1;break;
+			case 'L': freqTable[11]=freqTable[11]+1;break;
+			case 'M': freqTable[12]=freqTable[12]+1;break;
+			case 'N': freqTable[13]=freqTable[13]+1;break;
+			case 'O': freqTable[14]=freqTable[14]+1;break;
+			case 'P': freqTable[15]=freqTable[15]+1;break;
+			case 'Q': freqTable[16]=freqTable[16]+1;break;
+			case 'R': freqTable[17]=freqTable[17]+1;break;
+			case 'S': freqTable[18]=freqTable[18]+1;break;
+			case 'T': freqTable[19]=freqTable[19]+1;break;
+			case 'U': freqTable[20]=freqTable[20]+1;break;
+			case 'V': freqTable[21]=freqTable[21]+1;break;
+			case 'W': freqTable[22]=freqTable[22]+1;break;
+			case 'X': freqTable[23]=freqTable[23]+1;break;
+			case 'Y': freqTable[24]=freqTable[24]+1;break;
+			case 'Z': freqTable[25]=freqTable[25]+1;break;
+			case '[': freqTable[26]=freqTable[26]+1;break;
+			case '/': freqTable[27]=freqTable[27]+1;break;
+			case ']': freqTable[28]=freqTable[28]+1;break;
+			default: freqTable[26]=freqTable[26]+1;
+			}
+			n++;
+
+		}
+		int m=0,sizeQ=0;
+		while(m<29){
+			if(freqTable[m]>0)sizeQ++;
+			m++;
+		}
+		
+		queue=new PriorityQueue<>(sizeQ);
+	}
+
+
+	public void queueTree(){
+		int n=0;
+		while(n<29){
+			if(freqTable[n]>0){
+				switch(n){
+				case 0:queue.add(freqTable[n]+"A");break;
+				case 1:queue.add(freqTable[n]+"B");break;
+				case 2:queue.add(freqTable[n]+"C");break;
+				case 3:queue.add(freqTable[n]+"D");break;
+				case 4:queue.add(freqTable[n]+"E");break;
+				case 5:queue.add(freqTable[n]+"F");break;
+				case 6:queue.add(freqTable[n]+"G");break;
+				case 7:queue.add(freqTable[n]+"H");break;
+				case 8:queue.add(freqTable[n]+"I");break;
+				case 9:queue.add(freqTable[n]+"J");break;
+				case 10:queue.add(freqTable[n]+"K");break;
+				case 11:queue.add(freqTable[n]+"L");break;
+				case 12:queue.add(freqTable[n]+"M");break;
+				case 13:queue.add(freqTable[n]+"N");break;
+				case 14:queue.add(freqTable[n]+"O");break;
+				case 15:queue.add(freqTable[n]+"P");break;
+				case 16:queue.add(freqTable[n]+"Q");break;
+				case 17:queue.add(freqTable[n]+"R");break;
+				case 18:queue.add(freqTable[n]+"S");break;
+				case 19:queue.add(freqTable[n]+"T");break;
+				case 20:queue.add(freqTable[n]+"U");break;
+				case 21:queue.add(freqTable[n]+"V");break;
+				case 22:queue.add(freqTable[n]+"W");break;
+				case 23:queue.add(freqTable[n]+"X");break;
+				case 24:queue.add(freqTable[n]+"Y");break;
+				case 25:queue.add(freqTable[n]+"Z");break;
+				case 26:queue.add(freqTable[n]+"[");break;
+				case 27:queue.add(freqTable[n]+"/");break;
+				case 28:queue.add(freqTable[n]+"]");break;
+				default: queue.add(freqTable[26]+"[");
+				}
+			}
+			n++;
+		}
+	}
 }
