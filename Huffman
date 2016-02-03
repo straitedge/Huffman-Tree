@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+
+public class Huffman 
+{
+	
+	private static String text = "";
+	public static ArrayList ftable = new ArrayList();
+	
+	public Huffman(String str) 
+	{
+		text = str;
+	}
+
+
+	public static void encode()
+	{
+		//make freq table - 1st make lower case
+		text = text.toLowerCase();
+		for(int i =0;i<text.length();i++)
+		{
+			int temp = (int) text.charAt(i);
+			ftable[temp]++;
+			
+		}		
+		
+		//queue tree
+		//make Huffman tree
+		//make code table
+		//code
+	}
+	
+	
+	public static void decode()
+	{
+		
+	}
+	
+	
+	public static void displayTree()
+	{
+		System.out.println(text);
+	}
+	
+}
