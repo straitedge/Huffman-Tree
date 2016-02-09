@@ -1,70 +1,87 @@
+package huffman;
 
 import java.util.PriorityQueue;
+import java.util.Stack;
 
 /**
  *
- * @author Derek Wallace
+ * @author Derek Wallace, Jadin Casey, and Danny Kumpf
  */
 public class HuffTree {
     int[] freqTable=new int[29];
-    PriorityQueue<String> queue;
+    PriorityQueue<Node> queue;
+    String[] codeTable;
+    String[] decodeTable;
+    String codedMessage=""; String decodedMessage="";
+    String message="";
+    Node root;
     
     public HuffTree(String baseInput){
         int m=0;String alphabet="A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ / ]";
-        String allCaps=baseInput.toUpperCase();
-        makeFreqTable(allCaps);
+        message=baseInput.toUpperCase();
+        message=message.trim(); //clears the ending junk
+        message=message.replace(' ' ,'['); //Converts spaces to symbol i use
+        message=message.replace('\n', ']'); //converts new lines also
+        makeFreqTable(message);
         System.out.print(alphabet);
         System.out.println();
         while(m<29){System.out.print(freqTable[m]+" ");m++;}
+        System.out.println();
+        System.out.println();
+        queueTree();
+        makeTree();
+        
+        
+        
 
     }
     
     public void queueTree(){
-        int n=0;
+        int n=0; //makes the queue
         while(n<29){
             if(freqTable[n]>0){
                 switch(n){
-                    case 0:queue.add(freqTable[n]+"A");break;
-                    case 1:queue.add(freqTable[n]+"B");break;
-                    case 2:queue.add(freqTable[n]+"C");break;
-                    case 3:queue.add(freqTable[n]+"D");break;
-                    case 4:queue.add(freqTable[n]+"E");break;
-                    case 5:queue.add(freqTable[n]+"F");break;
-                    case 6:queue.add(freqTable[n]+"G");break;
-                    case 7:queue.add(freqTable[n]+"H");break;
-                    case 8:queue.add(freqTable[n]+"I");break;
-                    case 9:queue.add(freqTable[n]+"J");break;
-                    case 10:queue.add(freqTable[n]+"K");break;
-                    case 11:queue.add(freqTable[n]+"L");break;
-                    case 12:queue.add(freqTable[n]+"M");break;
-                    case 13:queue.add(freqTable[n]+"N");break;
-                    case 14:queue.add(freqTable[n]+"O");break;
-                    case 15:queue.add(freqTable[n]+"P");break;
-                    case 16:queue.add(freqTable[n]+"Q");break;
-                    case 17:queue.add(freqTable[n]+"R");break;
-                    case 18:queue.add(freqTable[n]+"S");break;
-                    case 19:queue.add(freqTable[n]+"T");break;
-                    case 20:queue.add(freqTable[n]+"U");break;
-                    case 21:queue.add(freqTable[n]+"V");break;
-                    case 22:queue.add(freqTable[n]+"W");break;
-                    case 23:queue.add(freqTable[n]+"X");break;
-                    case 24:queue.add(freqTable[n]+"Y");break;
-                    case 25:queue.add(freqTable[n]+"Z");break;
-                    case 26:queue.add(freqTable[n]+"[");break;
-                    case 27:queue.add(freqTable[n]+"/");break;
-                    case 28:queue.add(freqTable[n]+"]");break;
-                    default: queue.add(freqTable[26]+"[");
+                    case 0:queue.add(new Node(freqTable[n],"A"));break;
+                    case 1:queue.add(new Node(freqTable[n],"B"));break;
+                    case 2:queue.add(new Node(freqTable[n],"C"));break;
+                    case 3:queue.add(new Node(freqTable[n],"D"));break;
+                    case 4:queue.add(new Node(freqTable[n],"E"));break;
+                    case 5:queue.add(new Node(freqTable[n],"F"));break;
+                    case 6:queue.add(new Node(freqTable[n],"G"));break;
+                    case 7:queue.add(new Node(freqTable[n],"H"));break;
+                    case 8:queue.add(new Node(freqTable[n],"I"));break;
+                    case 9:queue.add(new Node(freqTable[n],"J"));break;
+                    case 10:queue.add(new Node(freqTable[n],"K"));break;
+                    case 11:queue.add(new Node(freqTable[n],"L"));break;
+                    case 12:queue.add(new Node(freqTable[n],"M"));break;
+                    case 13:queue.add(new Node(freqTable[n],"N"));break;
+                    case 14:queue.add(new Node(freqTable[n],"O"));break;
+                    case 15:queue.add(new Node(freqTable[n],"P"));break;
+                    case 16:queue.add(new Node(freqTable[n],"Q"));break;
+                    case 17:queue.add(new Node(freqTable[n],"R"));break;
+                    case 18:queue.add(new Node(freqTable[n],"S"));break;
+                    case 19:queue.add(new Node(freqTable[n],"T"));break;
+                    case 20:queue.add(new Node(freqTable[n],"U"));break;
+                    case 21:queue.add(new Node(freqTable[n],"V"));break;
+                    case 22:queue.add(new Node(freqTable[n],"W"));break;
+                    case 23:queue.add(new Node(freqTable[n],"X"));break;
+                    case 24:queue.add(new Node(freqTable[n],"Y"));break;
+                    case 25:queue.add(new Node(freqTable[n],"Z"));break;
+                    case 26:queue.add(new Node(freqTable[n],"["));break;
+                    case 27:queue.add(new Node(freqTable[n],"/"));break;
+                    case 28:queue.add(new Node(freqTable[n],"]"));break;
+                    default: queue.add(new Node(freqTable[26],"["));
                 }
             }
             n++;
         }
     }
-    public void makeFreqTable(String input){
+    public void makeFreqTable(String input){ //makes the frequency table
         int n=0; char charCheck='a';
         while(n<input.length()){
             charCheck=input.charAt(n);
             switch(charCheck){
-                case 'A': freqTable[0]=freqTable[0]+1;String a="A"+freqTable[0];break;
+                case 'A': freqTable[0]=freqTable[0]+1;break;
                 case 'B': freqTable[1]=freqTable[1]+1;break;
                 case 'C': freqTable[2]=freqTable[2]+1;break;
                 case 'D': freqTable[3]=freqTable[3]+1;break;
@@ -99,10 +116,140 @@ public class HuffTree {
             
         }
         int m=0,sizeQ=0;
-        while(m<29){
+        while(m<29){ //counts how many characters are actually used
             if(freqTable[m]>0)sizeQ++;
             m++;
         }
         queue=new PriorityQueue<>(sizeQ);
+        codeTable=new String[sizeQ]; //Stores binary
+        decodeTable=new String[sizeQ]; //assosciates a letter with the binary
     }
+    public void makeTree(){ //makes tree
+        Node temp1; Node temp2;Node adder;
+        while(queue.size()>1){
+            temp1=queue.poll();
+            temp2=queue.poll();
+            adder=new Node(temp1.freq+temp2.freq,"+");
+            adder.leftChild=temp1; temp1.parent=adder;
+            adder.rightChild=temp2; temp2.parent=adder;
+            queue.add(adder);
+        }
+        root=queue.poll();
+        
+    }
+    public void makeCodeTable(){ //makes the code table
+        int count=0;String code="";Node pointer=root;
+        
+        while (count<codeTable.length){
+          
+                if(pointer.leftChild!=null)
+                {
+                    code+="0";
+                    if(pointer.leftChild.value.equals("+")){pointer=pointer.leftChild;}
+                    else {
+                        codeTable[count]=code; 
+                        decodeTable[count]=pointer.leftChild.value;
+                        code=code.substring(0,code.length()-1);
+                        pointer.leftChild=null;
+                        count++;
+                        }
+                }
+                else if(pointer.rightChild!=null)
+                {
+                    code+="1";
+                    if(pointer.rightChild.value.equals("+")){pointer=pointer.rightChild;}
+                    else {
+                        codeTable[count]=code; 
+                        decodeTable[count]=pointer.rightChild.value;
+                        code=code.substring(0,code.length()-1);
+                        pointer.rightChild=null;
+                        count++;
+                        }
+                }
+                else{
+                    if (pointer==root){break;}
+                    code=code.substring(0,code.length()-1);
+                    if(pointer==pointer.parent.leftChild){pointer=pointer.parent;pointer.leftChild=null;}
+                    else {pointer=pointer.parent;pointer.rightChild=null;}
+                    }
+          
+        }
+    }
+    public void encode(){
+        String current="";int i=0;String coding=message;
+        makeCodeTable();
+        System.out.println(coding);
+        while(coding.length()>0){
+            current=coding.substring(0,1);
+            while(i<decodeTable.length){
+                if(decodeTable[i].equals(current)){codedMessage=codedMessage+codeTable[i];coding=coding.substring(1);}
+                i++;
+            }
+            i=0;
+        }
+        while(i<codeTable.length){
+            System.out.println(decodeTable[i]+" "+codeTable[i]);
+            i++;
+        }
+        System.out.println("Coded Message: "+codedMessage);
+        
+    }
+    public String decode(){
+        String checking=""; int i=0,j=1;
+        while(codedMessage.length()>0){
+            checking=codedMessage.substring(0,j);
+            while(i<codeTable.length){
+                if(codeTable[i].equals(checking)){decodedMessage=decodedMessage+decodeTable[i];codedMessage=codedMessage.substring(j);j=1;}
+                i++;
+            }
+            j++;
+            i=0;
+        }
+        System.out.println("Decoded Message: "+decodedMessage);
+        return decodedMessage;
+    }
+public void displayTree() // were told we could use the displayTree the teacher made
+	{
+            queueTree();makeTree(); //called bc an inefficiency in makeCodeTable loses tree refs
+		Stack globalStack = new Stack();
+		globalStack.push(root);
+		int nBlanks = 32;
+		boolean isRowEmpty = false;
+		System.out.println(
+				"......................................................");
+		while(isRowEmpty==false)
+		{
+			Stack localStack = new Stack();
+			isRowEmpty = true;
+			for(int j=0; j<nBlanks; j++)
+				System.out.print(' ');
+			while(globalStack.isEmpty()==false)
+			{
+				Node temp = (Node)globalStack.pop();
+				if(temp != null)
+				{
+					System.out.print(temp.value+temp.freq);
+					localStack.push(temp.leftChild);
+					localStack.push(temp.rightChild);
+					if(temp.leftChild != null ||
+							temp.rightChild != null)
+						isRowEmpty = false;
+				}
+				else
+				{
+					System.out.print("--");
+					localStack.push(null);
+					localStack.push(null);
+				}
+				for(int j=0; j<nBlanks*2-2; j++)
+					System.out.print(' ');
+			} // end while globalStack not empty
+			System.out.println();
+			nBlanks /= 2;
+			while(localStack.isEmpty()==false)
+				globalStack.push( localStack.pop() );
+		} // end while isRowEmpty is false
+		System.out.println(
+				"......................................................");
+	}
 }
