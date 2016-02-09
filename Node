@@ -1,0 +1,26 @@
+package huffman;
+/**
+ *
+ * @author Derek Wallace, Jadin Casey, and Danny Kumpf
+ */
+
+public class Node implements Comparable<Node>
+{
+    public int freq;
+    public String value;
+    public Node leftChild;
+    public Node rightChild;
+    public Node parent; 
+    
+    public Node(int f,String v){
+        value=v; //the character
+        freq=f; //frequency of the character
+}
+
+    @Override
+    public int compareTo(Node o1) { //used in the priority queue
+        if (freq<o1.freq)return -1;
+        else return 1;
+                }
+       
+}
